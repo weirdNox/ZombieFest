@@ -28,10 +28,6 @@ if /i %BUILD_TYPE% == release (
 
 del *.pdb >NUL 2>NUL
 
-rem echo WAITING FOR PDB > lock.tmp
-rem cl ..\src\zfest.cpp %compilerFlags% /Fmzfest.map /LD /link /incremental:no /opt:ref /PDB:zfest_%random%.pdb
-rem del lock.tmp
-
 cl ..\src\win32_zfest.cpp %compilerFlags% /Fmwin32_zfest.map /link /incremental:no /opt:ref user32.lib gdi32.lib winmm.lib opengl32.lib
 
 popd

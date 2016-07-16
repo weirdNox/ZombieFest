@@ -1,7 +1,8 @@
 #include "zfest_common.h"
 #include "zfest_memory.h"
-#include "zfest_platform.h"
 #include "zfest_math.h"
+#include "zfest_platform.h"
+#include "zfest.h"
 
 #include "zfest_render.cpp"
 #include "zfest.cpp"
@@ -56,6 +57,21 @@ internal LRESULT CALLBACK win32MainWindowCallback(HWND window, UINT message, WPA
             return 0;
         } break;
 
+        case WM_LBUTTONDOWN:
+        {
+            core->keyStates[VK_LBUTTON] = true;
+            core->keyDeltas[VK_LBUTTON] = true;
+
+            return 0;
+        } break;
+
+        case WM_LBUTTONUP:
+        {
+            core->keyStates[VK_LBUTTON] = false;
+
+            return 0;
+        } break;
+
         case WM_SIZE:
         {
             core->width = LOWORD(lParam);
@@ -72,7 +88,6 @@ internal LRESULT CALLBACK win32MainWindowCallback(HWND window, UINT message, WPA
     return DefWindowProcA(window, message, wParam, lParam);
 }
 
-#include <stdio.h>
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {
     Core core = {};
@@ -91,11 +106,12 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
         return 1;
     }
 
+    DWORD windowStyles = WS_VISIBLE|WS_OVERLAPPED|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX;
     RECT windowRect = {0, 0, 1024, 576};
-    AdjustWindowRect(&windowRect, WS_VISIBLE|WS_OVERLAPPEDWINDOW^WS_THICKFRAME, 0);
+    AdjustWindowRect(&windowRect, windowStyles, 0);
     HWND window = CreateWindowA(windowClass.lpszClassName,
                                 "Zombie Fest",
-                                WS_VISIBLE|WS_OVERLAPPEDWINDOW^WS_THICKFRAME,
+                                windowStyles,
                                 CW_USEDEFAULT,
                                 CW_USEDEFAULT,
                                 windowRect.right - windowRect.left,
@@ -177,6 +193,11 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
             TranslateMessage(&message);
             DispatchMessageA(&message);
         }
+
+        POINT mousePoint;
+        GetCursorPos(&mousePoint);
+        ScreenToClient(window, &mousePoint);
+        core.mousePos = v2i(mousePoint.x, core.height - mousePoint.y);
 
         gameUpdateAndRender(&core);
 

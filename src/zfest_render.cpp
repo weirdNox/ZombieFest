@@ -11,9 +11,10 @@ struct RenderCommandClear
 
 struct RenderCommandRect
 {
-    V2 minPos;
-    V2 maxPos;
+    V2 pos;
+    V2 dim;
     V4 color;
+    real32 rotationDeg;
 };
 
 #define pushRenderCommand(commands, type) (type *)pushRenderCommand_(commands, RenderType_##type, sizeof(type))
@@ -45,13 +46,17 @@ internal void clear(RenderCommands *commands, V4 color)
     }
 }
 
-internal void pushRect(RenderCommands *commands, V2 pos, V2 dim, V4 color)
+internal void pushRect(RenderCommands *commands, GameState *gameState, V2 pos, V2 dim,
+                       V4 color, real32 rotationDeg = 0.0f)
 {
     RenderCommandRect *entry = pushRenderCommand(commands, RenderCommandRect);
     if(entry)
     {
+        pos -= gameState->cameraPos;
+
         entry->color = color;
-        entry->minPos = pos;
-        entry->maxPos = pos + dim;
+        entry->rotationDeg = rotationDeg;
+        entry->pos = pos*gameState->metersToPixels;
+        entry->dim = dim*gameState->metersToPixels;
     }
 }

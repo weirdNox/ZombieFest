@@ -28,7 +28,7 @@ struct TemporaryMemory
 
 enum ArenaPushFlag
 {
-    ArenaFlag_clearToZero = 1<<0,
+    ArenaFlag_ClearToZero = 1<<0,
 };
 
 internal MemoryArena initializeArena(MemoryArena *arena, void *base, MemSize size)
@@ -44,14 +44,14 @@ internal MemoryArena initializeArena(MemoryArena *arena, void *base, MemSize siz
 
 #define pushStruct(arena, Type, ...) pushSize_((arena), sizeof(Type), ##__VA_ARGS__)
 #define pushArray(arena, count, Type) pushSize_((arena), (count)*sizeof(Type), ##__VA_ARGS__)
-internal void *pushSize_(MemoryArena *arena, MemSize size, uint32 flags = ArenaFlag_clearToZero)
+internal void *pushSize_(MemoryArena *arena, MemSize size, uint32 flags = ArenaFlag_ClearToZero)
 {
     assert(arena->used + size < arena->size);
 
     void *result = arena->base + arena->used;
     arena->used += size;
 
-    if(flags & ArenaFlag_clearToZero)
+    if(flags & ArenaFlag_ClearToZero)
     {
         zeroSize(size, result);
     }

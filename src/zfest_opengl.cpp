@@ -8,7 +8,6 @@ internal void renderCommands(RenderCommands *commands, uint32 width, uint32 heig
 
 
     real32 aspectRatio = 16.0f / 9.0f;
-    glOrtho(0, aspectRatio*576.0f, 0, 576, -1, 1);
 
     if(width > height*aspectRatio)
     {
@@ -26,6 +25,8 @@ internal void renderCommands(RenderCommands *commands, uint32 width, uint32 heig
         glViewport(0, margin, width, height);
         glScissor(0, margin, width, height);
     }
+
+    glOrtho(-(int32)width/2, width/2, -(int32)height/2, height/2, -1, 1);
 
     glDisable(GL_SCISSOR_TEST);
     glClearColor(0, 0, 0, 1);
@@ -55,18 +56,26 @@ internal void renderCommands(RenderCommands *commands, uint32 width, uint32 heig
             {
                 RenderCommandRect *entry = (RenderCommandRect *)data;
 
+                glPushMatrix();
+
+                glTranslatef(entry->pos.x, entry->pos.y, 0);
+                glRotatef(entry->rotationDeg, 0, 0, 1);
+
+                V2 halfDim = entry->dim * 0.5f;
                 glBegin(GL_TRIANGLES);
                 glColor4f(entry->color.r, entry->color.g, entry->color.b, entry->color.a);
 
-                glVertex2f(entry->minPos.x, entry->minPos.y);
-                glVertex2f(entry->maxPos.x, entry->minPos.y);
-                glVertex2f(entry->minPos.x, entry->maxPos.y);
+                glVertex2f(-halfDim.x, -halfDim.y);
+                glVertex2f(halfDim.x, -halfDim.y);
+                glVertex2f(-halfDim.x, halfDim.y);
 
-                glVertex2f(entry->maxPos.x, entry->minPos.y);
-                glVertex2f(entry->maxPos.x, entry->maxPos.y);
-                glVertex2f(entry->minPos.x, entry->maxPos.y);
+                glVertex2f(halfDim.x, -halfDim.y);
+                glVertex2f(halfDim.x, halfDim.y);
+                glVertex2f(-halfDim.x, halfDim.y);
 
                 glEnd();
+
+                glPopMatrix();
 
                 next += sizeof(*entry);
             } break;

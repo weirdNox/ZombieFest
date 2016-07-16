@@ -282,6 +282,26 @@ inline real32 length(V2 a)
     return result;
 }
 
+inline V2 normalize(V2 a)
+{
+    V2 result = a * (1.0f / length(a));
+
+    return result;
+}
+
+inline V2 normalizeSafe(V2 a)
+{
+    V2 result = a;
+
+    real32 aLength = length(a);
+    if(aLength)
+    {
+        result *= (1.0f/aLength);
+    }
+
+    return result;
+}
+
 inline V2 clamp01(V2 value)
 {
     V2 result;
