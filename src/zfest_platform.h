@@ -12,6 +12,9 @@ struct Core
 {
     bool32 running;
 
+    // TODO(nox): This is _not_ cross platform! This is using windows virtual
+    // keycodes as indices, and would not work on other platforms. We need to have
+    // some translation method.
     uint8 keyStates[256];
     uint8 keyDeltas[256];
 
@@ -32,9 +35,6 @@ struct Core
     real32 frameTime;
 };
 
-// TODO(nox): This is _not_ cross platform! This is using windows virtual
-// keycodes as indices, and would not work on other platforms. We need to have
-// some translation method.
 #define LEFT_MOUSE_BUTTON 0x01
 
 #endif // ZFEST_PLATFORM_H

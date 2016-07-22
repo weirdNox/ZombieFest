@@ -59,15 +59,15 @@ internal LRESULT CALLBACK win32MainWindowCallback(HWND window, UINT message, WPA
 
         case WM_LBUTTONDOWN:
         {
-            core->keyStates[VK_LBUTTON] = true;
-            core->keyDeltas[VK_LBUTTON] = true;
+            core->keyStates[LEFT_MOUSE_BUTTON] = true;
+            core->keyDeltas[LEFT_MOUSE_BUTTON] = true;
 
             return 0;
         } break;
 
         case WM_LBUTTONUP:
         {
-            core->keyStates[VK_LBUTTON] = false;
+            core->keyStates[LEFT_MOUSE_BUTTON] = false;
 
             return 0;
         } break;

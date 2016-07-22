@@ -1,1 +1,19 @@
-There is not much going on here (yet??)....
+# ZOMBIE FEST
+
+This is going to be a top-down shooter game where you have to survive hordes of zombies while you are inside a basketball court in a prison.
+
+*Game design is not done, more info on this later*
+
+This game is targeting Windows.
+
+## Building and running
+In order to build this game you should have Visual Studio installed.
+If you installed it on a custom location or if you don't have **Visual Studio 2015**, you should create a file `code/env.bat` that has a line like this:
+
+    set TOOLSET_LOCATION=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
+
+with the path changed to where your `vcvarsall.bat` is located (that one is the default path for VS2015).
+
+After that, all you need to do is to run `code/build.bat`. The executable will be located in the `build` folder.
+
+For a list of flags you can set on the `code/env.bat`, just take a look at `code/build.bat`.
